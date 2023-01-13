@@ -5,7 +5,7 @@ let fireWorks = [];
 let particle = [];
 let circles = [];
 let fireWorkChance = 0.1;
-let fireWorkMax = 5;
+let fireWorkMax = 8;
 let color = 0;
 const init = () => {
   resizeReset();
@@ -16,7 +16,7 @@ const init = () => {
 const animationLoop = () => {
   if (fireWorks.length < fireWorkMax && Math.random() < fireWorkChance) {
     fireWorks.push(new FireWork());
-    color += 10;
+    color += 20;
   }
   ctx.globalCompositeOperation = "source-over";
   ctx.fillStyle = "rgba(0,0,0,0.1)";
@@ -101,11 +101,11 @@ class FireWork {
     this.color = color;
     this.alpha = 1;
     this.tick = 0;
-    this.ttl = getRandom(150, 200);
+    this.maxTick = getRandom(150, 200);
     this.targetY = getRandom(height * 0.2, height * 0.4);
   }
   drawLine = () => {
-    if (this.tick <= this.ttl) {
+    if (this.tick <= this.maxTick) {
       ctx.beginPath();
       ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
       ctx.fillStyle = `hsla(${this.color}, 100%, 50%, ${this.alpha})`;
@@ -114,7 +114,7 @@ class FireWork {
     }
   };
   update = () => {
-    let progress = 1 - (this.ttl - this.tick) / this.ttl;
+    let progress = 1 - (this.maxTick - this.tick) / this.maxTick;
     this.y = height - (height - this.targetY) * progress;
     this.alpha = 1 - easeOutQuart(progress);
     this.tick += 1;
